@@ -21,6 +21,8 @@
 #pragma once
 
 #include "fp-image.h"
+#include "sigfm/sigfm.h"
+#include <config.h>
 
 /**
  * FpiImageFlags:
@@ -64,12 +66,13 @@ struct _FpImage
   FpiImageFlags flags;
 
   /*< private >*/
-  guint8    *data;
-  guint8    *binarized;
+  guint8       *data;
+  guint8       *binarized;
 
-  GPtrArray *minutiae;
+  GPtrArray    *minutiae;
+  SigfmImgInfo *sigfm_info;
 
-  gboolean   detection_in_progress;
+  gboolean      detection_in_progress;
 };
 
 gint fpi_std_sq_dev (const guint8 *buf,
@@ -81,3 +84,9 @@ gint fpi_mean_sq_diff_norm (const guint8 *buf1,
 FpImage *fpi_image_resize (FpImage *orig,
                            guint    w_factor,
                            guint    h_factor);
+
+SigfmImgInfo * fp_image_get_sigfm_info (FpImage *self);
+void           fp_image_extract_sigfm_info (FpImage             *self,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data);
